@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,13 +17,13 @@ namespace DatabaseClusterTests.Repository
             _database = client.GetDatabase(databaseName);
         }
 
-        public async Task<bool> ExecuteExpensiveQuery<T>()
+        public async Task<IList<T>> ExecuteQuery<T>(string collectionName)
         {
-            var collection = _database.GetCollection<T>("bigcollection");
+            var collection = _database.GetCollection<T>(collectionName);
 
             var result = await collection.Find(new BsonDocument()).ToListAsync();
 
-            return true;
+            return result;
         }
 
         public async Task<bool> Upsert<T>(T model, string collectionName) where T : IModel

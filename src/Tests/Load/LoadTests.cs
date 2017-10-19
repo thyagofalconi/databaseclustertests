@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using DatabaseClusterTests.Repository;
 using MongoDB.Bson.Serialization.Attributes;
 using NUnit.Framework;
@@ -15,16 +16,17 @@ namespace DatabaseClusterTests.Tests.Load
 
             const string databaseName = "DATABASE_NAME";
             const string connectionString = "CONNECTION_STRING";
+            const string collectionName = "BIG_COLLECTION";
 
             var databaseRepository = new MongoDbRepository(connectionString, databaseName);
             
             //When
 
-            var result = await databaseRepository.ExecuteExpensiveQuery<MyModel>();
+            var result = await databaseRepository.ExecuteQuery<MyModel>(collectionName);
 
             //Then
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result.Any());
         }
 
         public class MyModel
