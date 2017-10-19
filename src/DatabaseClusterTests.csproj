@@ -55,7 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Repository\IModel.cs" />
     <Compile Include="Repository\MongoDbRepository.cs" />
+    <Compile Include="Tests\DataReplication\DataReplicationTests.cs" />
     <Compile Include="Tests\Load\LoadTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

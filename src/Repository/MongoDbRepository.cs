@@ -23,5 +23,38 @@ namespace DatabaseClusterTests.Repository
 
             return true;
         }
+
+        public async Task<bool> Upsert<T>(T model, string collectionName) where T : IModel
+        {
+            var collection = _database.GetCollection<T>(collectionName);
+
+            var filter = Builders<T>.Filter.Eq(x => x.Id, model.Id);
+
+            var options = new FindOneAndReplaceOptions<T, T>
+            {
+                IsUpsert = true,
+                ReturnDocument = ReturnDocument.After
+            };
+
+            await collection.FindOneAndReplaceAsync(filter, model, options);
+
+            return true;
+        }
+
+        public async Task<T> Get<T>(object modelId, string collectionName) where T : IModel
+        {
+            var collection = _database.GetCollection<T>(collectionName);
+
+            var filter = Builders<T>.Filter.Eq(x => x.Id, modelId);
+
+            var result = await collection.Find(filter).FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public void DeleteCollection(string collectionName)
+        {
+            _database.DropCollection(collectionName);
+        }
     }
 }
